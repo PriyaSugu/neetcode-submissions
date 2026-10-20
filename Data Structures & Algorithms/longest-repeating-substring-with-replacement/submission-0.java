@@ -1,28 +1,21 @@
 class Solution {
     public int characterReplacement(String s, int k) {
-        Set<Character> charSet = new HashSet<>();
-        for(char ch : s.toCharArray()){
-            charSet.add(ch);
-        }
-        int longest = 0;
+        Map<Character, Integer> map = new HashMap<>();
+        int maxf = 0, res = 0;
+        for(int l = 0, r = 0; r < s.length(); r++){
+            char curr = s.charAt(r);
+            map.put(curr, map.getOrDefault(curr, 0) + 1);
 
-        for(char c : charSet){
-            int count = 0, left = 0;
-            for(int right = 0; right < s.length(); right++){
-                if(s.charAt(right) == c){
-                    count++;
-                }
-                while((right - left + 1) - count > k){
-                    if(s.charAt(left) == c){
-                        count--;
-                    }
-                    left++;
-                }
-                longest = Math.max(longest, right - left + 1);
+            maxf = Math.max(maxf, map.get(curr));
+
+            while((r-l+1) - maxf > k){
+                map.put(s.charAt(l), map.get(s.charAt(l)) - 1);
+                l++;
             }
-        }
 
-        return longest;
-        
+            res = Math.max(res, r-l+1);
+
+        }
+        return res;
     }
 }
