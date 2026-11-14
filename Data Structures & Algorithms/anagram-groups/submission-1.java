@@ -1,17 +1,14 @@
 class Solution {
     public List<List<String>> groupAnagrams(String[] strs) {
-
-        Map<String,List<String>> map = new HashMap<>();
-
-        for(String str : strs){
-            int[] count = new int[26];
-            for(char c: str.toCharArray()){
-                count[c - 'a']++;
+        Map<String, List<String>> map = new HashMap<>();
+        for(String str: strs){
+            int[] freq = new int[26];
+            for(char ch: str.toCharArray()){
+                freq[ch - 'a']++;
             }
-            map.computeIfAbsent(Arrays.toString(count),k -> new ArrayList<>())
-                .add(str);
+            String key = Arrays.toString(freq);
+            map.computeIfAbsent(key, k -> new ArrayList<>()).add(str);
         }
-        return new ArrayList<>(map.values());
-        
+        return map.values().stream().toList();
     }
 }
