@@ -1,28 +1,25 @@
 class Solution {
     public boolean isValidSudoku(char[][] board) {
-        Map<Integer, HashSet<Integer>> rows = new HashMap<>();
-        Map<Integer, HashSet<Integer>> cols = new HashMap<>();
-        Map<String, HashSet<Integer>> squares = new HashMap<>(); //key - [r/3,c/3]
+        int[] rows = new int[9];
+        int[] cols = new int[9];
+        int[] squares = new int[9];
 
-        for(int i = 0; i < 9; i++){
-            for(int j = 0; j < 9; j++){
-                if(board[i][j] == '.'){
-                    continue;
+        for(int r = 0; r < 9; r++){
+            for(int c = 0; c < 9; c++){
+                if(board[r][c] == '.') continue;
+
+                int val = board[r][c] - '1';
+                int mask = 1 << val;
+
+                if((rows[r] & mask) > 0 || (cols[c] & mask) > 0 || (squares[(r/3 )* 3 + (c/3)] & mask) > 0){
+                    return false;
                 }
-                String squareKey = i/3 + "," + j/3;
-                int value = board[i][j];
-                if(rows.computeIfAbsent(i, k -> new HashSet<>()).contains(value)||
-                    cols.computeIfAbsent(j,k -> new HashSet<>()).contains(value)||
-                    squares.computeIfAbsent(squareKey, k -> new HashSet<>()).contains(value)){
-                        return false;
-                    }
-                    rows.get(i).add(value);
-                    cols.get(j).add(value);
-                    squares.get(squareKey).add(value);
+
+                rows[r] |= mask;
+                cols[c] |= mask;
+                squares[(r/3) * 3 + (c/3)] |= mask;
             }
         }
-        
         return true;
-        
     }
 }
