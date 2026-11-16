@@ -3,34 +3,26 @@ class Solution {
         List<List<Integer>> res = new ArrayList<>();
         Arrays.sort(nums);
 
-        for (int i = 0; i < nums.length; i++) {
-            if (i > 0 && nums[i] == nums[i - 1]) {
-                continue;
-            }
-            int left = i + 1;
-            int right = nums.length - 1;
-            int target = -nums[i];
-            while (left < right) {
-                int sum = nums[left] + nums[right];
-                if (sum < target) {
-                    left++;
-                } else if (sum > target) {
-                    right--;
-                } else {
-                    res.add(List.of(nums[i], nums[left], nums[right]));
-                    
-                    while (left < right && nums[left] == nums[left + 1]) {
-                        left++;
+        for(int i = 0; i < nums.length; i++){
+            if(nums[i] > 0) break;
+            if(i > 0 && nums[i] == nums[i-1]) continue;
+            int l = i+1, r = nums.length - 1;
+            while(l < r){
+                int sum = nums[i] + nums[l] + nums[r];
+                if(sum < 0){
+                    l++;
+                }else if(sum > 0){
+                    r--;
+                }else{
+                    res.add(List.of(nums[i], nums[l], nums[r]));
+                    l++;
+                    r--;
+                    while(l < r && nums[l] == nums[l-1]){
+                        l++;
                     }
-                    while (left < right && nums[right] == nums[right - 1]) {
-                        right--;
-                    }
-                    left++;
-                    right--;
                 }
             }
         }
-
         return res;
     }
 }
