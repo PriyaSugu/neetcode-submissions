@@ -1,39 +1,44 @@
 class Solution {
     public boolean checkInclusion(String s1, String s2) {
+        int m = s1.length();
+        int n = s2.length();
+        if(m > n){
+            return false;
+        }
 
-        int s1len = s1.length();
         int[] s1freq = new int[26];
-
-        for(char ch: s1.toCharArray()){
-             s1freq[ch - 'a']++;
+        int[] s2freq = new int[26];
+        for(int i = 0; i < m; i++){
+            s1freq[s1.charAt(i) - 'a']++;
+            s2freq[s2.charAt(i) - 'a']++;
         }
-
-        int left = 0;
-        int[] window = new int[26];
-        for(int right = 0; right < s2.length(); right++){
-            
-            window[s2.charAt(right) - 'a']++;
-            
-            if(right - left + 1 > s1len){
-                window[s2.charAt(left) - 'a']--;
-                left++;
+        int matches = 0;
+        for(int i = 0; i < 26;i++){
+            if(s1freq[i] == s2freq[i]){
+                matches++;
             }
-            if(right - left + 1 == s1len){
-                boolean found = true;
-                for(int i = 0; i < 26; i++){
-                    if(window[i] != s1freq[i]){
-                        found = false;
-                    }        
-                }
-                if(found){
-                    return true;
-                }
-            }
-            
         }
+        for(int l = 0, r = m; r < n; l++,r++){
+            if(matches == 26){
+                return true;
+            }
 
-        return false;
+            int idx = s2.charAt(r) - 'a';
+            s2freq[idx]++;
+            if(s1freq[idx] == s2freq[idx]){
+                matches++;
+            }else if(s1freq[idx] + 1 == s2freq[idx]){
+                matches--;
+            }
 
-        
+            idx = s2.charAt(l) - 'a';
+            s2freq[idx]--;
+            if(s1freq[idx] == s2freq[idx]){
+                matches++;
+            }else if(s1freq[idx] - 1 == s2freq[idx]){
+                matches--;
+            }
+        }
+        return matches == 26;
     }
 }
