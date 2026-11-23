@@ -1,12 +1,11 @@
 class Solution {
 
     public String encode(List<String> strs) {
-        StringBuffer sbr = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         for(String str: strs){
-            sbr.append(str.length()).append("#").append(str);
+            sb.append(str.length()).append('#').append(str);
         }
-        return sbr.toString();
-
+        return sb.toString();
     }
 
     public List<String> decode(String str) {
@@ -17,10 +16,12 @@ class Solution {
             while(str.charAt(j) != '#'){
                 j++;
             }
-            int length = Integer.parseInt(str.substring(i,j));
-            res.add(str.substring(j+1, j+1+length));
-            i = j+1+length;
+            int len = Integer.parseInt(str.substring(i, j));
+            j++;
+            res.add(str.substring(j, j + len));
+            i = j + len;
         }
         return res;
+
     }
 }
